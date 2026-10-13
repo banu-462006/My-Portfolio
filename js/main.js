@@ -1,6 +1,7 @@
 /**
- * PORTFOLIO JAVASCRIPT
- * Interactive features: Theming, Filtering, Typewriter, Mobile Menu, Modals & Form validation.
+ * PORTFOLIO JAVASCRIPT — BANUSHRI KANDHAN
+ * Handles Theme Toggling, Mobile Menu, Typewriter, Project Filtering,
+ * ScrollSpy, Smooth Scrolling, Back-to-Top, and Contact Form Feedback.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initTypewriter();
   initProjectFiltering();
-  initProjectModal();
   initScrollSpy();
   initBackToTop();
   initContactForm();
@@ -23,24 +23,26 @@ function initTheme() {
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   // Set initial theme
-  const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
+  const initialTheme = storedTheme || (prefersDark ? 'dark' : 'dark');
   document.documentElement.setAttribute('data-theme', initialTheme);
 
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('portfolio-theme', newTheme);
     });
   }
 
-  // Listen to system preference changes if user hasn't explicitly set one
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('portfolio-theme')) {
-      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    }
-  });
+  // System theme preference listener (only if user hasn't explicitly overridden)
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('portfolio-theme')) {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      }
+    });
+  }
 }
 
 /* ==========================================================================
@@ -58,7 +60,7 @@ function initMobileMenu() {
     toggleBtn.setAttribute('aria-expanded', isOpen);
   });
 
-  // Close mobile menu when clicking any nav link
+  // Close menu when clicking any nav item
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       navLinks.classList.remove('open');
@@ -73,6 +75,14 @@ function initMobileMenu() {
       toggleBtn.setAttribute('aria-expanded', 'false');
     }
   });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
 }
 
 /* ==========================================================================
@@ -83,16 +93,16 @@ function initTypewriter() {
   if (!typewriterElement) return;
 
   const roles = [
+    'AI/ML Engineer',
     'Python Developer',
-    'AI & Machine Learning Enthusiast',
-    'NLP & Deep Learning Explorer',
-    'Web Developer'
+    'Machine Learning Practitioner',
+    'B.Sc. Computer Science Graduate'
   ];
 
   let roleIndex = 0;
   let charIndex = 0;
   let isDeleting = false;
-  let typingSpeed = 100;
+  let typingSpeed = 90;
 
   function type() {
     const currentRole = roles[roleIndex];
@@ -100,21 +110,20 @@ function initTypewriter() {
     if (isDeleting) {
       typewriterElement.textContent = currentRole.substring(0, charIndex - 1);
       charIndex--;
-      typingSpeed = 50;
+      typingSpeed = 45;
     } else {
       typewriterElement.textContent = currentRole.substring(0, charIndex + 1);
       charIndex++;
-      typingSpeed = 110;
+      typingSpeed = 95;
     }
 
     if (!isDeleting && charIndex === currentRole.length) {
-      // Pause at full word
-      typingSpeed = 1800;
+      typingSpeed = 1900; // Pause at end of text
       isDeleting = true;
     } else if (isDeleting && charIndex === 0) {
       isDeleting = false;
       roleIndex = (roleIndex + 1) % roles.length;
-      typingSpeed = 400;
+      typingSpeed = 350;
     }
 
     setTimeout(type, typingSpeed);
@@ -134,7 +143,6 @@ function initProjectFiltering() {
 
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
-      // Update active state
       filterButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
 
@@ -144,16 +152,9 @@ function initProjectFiltering() {
         const category = card.getAttribute('data-category');
         if (filterValue === 'all' || category === filterValue) {
           card.style.display = 'flex';
-          setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, 10);
+          card.style.opacity = '1';
         } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(15px)';
-          setTimeout(() => {
-            card.style.display = 'none';
-          }, 200);
+          card.style.display = 'none';
         }
       });
     });
@@ -161,132 +162,7 @@ function initProjectFiltering() {
 }
 
 /* ==========================================================================
-   5. Project Details Modal
-   ========================================================================== */
-const projectDetailsData = {
-  'project-1': {
-    title: 'Farmer-to-Customer Green Cart',
-    category: 'Web Platform & MySQL',
-    description: 'A dedicated web platform designed to empower agricultural producers by connecting farmers directly with customers, eliminating intermediaries. Provides transparent market pricing, fresh farm inventory management, and a clean buying workflow.',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'MySQL', 'Responsive UI'],
-    highlights: [
-      'Developed a direct farm-to-consumer marketplace interface, eliminating distributor commissions.',
-      'Designed responsive product catalog layouts with clear pricing, farm details, and categorization.',
-      'Integrated MySQL database backend to manage farm produce inventory, stock levels, and customer orders.',
-      'Engineered an intuitive shopping cart and checkout interface for seamless customer ordering.'
-    ],
-    github: 'https://github.com/banu-462006',
-    demo: 'https://github.com/banu-462006'
-  },
-  'project-2': {
-    title: 'Terra Bloom – Healthy & Organic Food Ordering',
-    category: 'Responsive Web Application',
-    description: 'A modern, responsive organic food ordering website designed for healthy lifestyle enthusiasts. Features aesthetic signature meal presentations, customizable ingredients, real-time shopping cart calculation, and smooth checkout flow.',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'CSS Grid', 'Flexbox'],
-    highlights: [
-      'Designed visually appetizing food menus featuring bowls, salads, and organic dishes.',
-      'Built a reactive shopping cart with item additions, quantity management, and automatic subtotal updates.',
-      'Engineered multi-step checkout workflow with customer details validation and order confirmation modal.',
-      'Optimized layout for fast load times and seamless responsiveness across mobile, tablet, and desktop screens.'
-    ],
-    github: 'https://github.com/banu-462006',
-    demo: 'https://github.com/banu-462006'
-  },
-  'project-3': {
-    title: 'NLP-Based Conversational Chatbot',
-    category: 'AI & Natural Language Processing',
-    description: 'An intelligent conversational AI agent built with Python and Natural Language Processing. Analyzes user queries through text preprocessing pipelines, scores emotional sentiment, maps intents, and generates relevant, contextual responses.',
-    technologies: ['Python', 'NLP', 'NLTK', 'Sentiment Analysis', 'Machine Learning', 'Text Preprocessing'],
-    highlights: [
-      'Implemented full text preprocessing pipeline: tokenization, stop-word filtering, and lemmatization.',
-      'Integrated sentiment analysis to identify user sentiment (positive, neutral, negative) and tailor responses.',
-      'Engineered intent-classification algorithms with dynamic fallback handling for unknown queries.',
-      'Demonstrated core machine learning and Python data processing practices for real-world conversational AI.'
-    ],
-    github: 'https://github.com/banu-462006',
-    demo: 'https://github.com/banu-462006'
-  }
-};
-
-function initProjectModal() {
-  const modal = document.getElementById('project-modal');
-  const modalClose = document.getElementById('modal-close');
-  const viewDetailBtns = document.querySelectorAll('.view-project-btn');
-
-  if (!modal) return;
-
-  function openModal(projectId) {
-    const data = projectDetailsData[projectId];
-    if (!data) return;
-
-    document.getElementById('modal-title').textContent = data.title;
-    document.getElementById('modal-category').textContent = data.category;
-    document.getElementById('modal-desc').textContent = data.description;
-
-    // Tech tags
-    const tagsContainer = document.getElementById('modal-tags');
-    tagsContainer.innerHTML = '';
-    data.technologies.forEach(tech => {
-      const span = document.createElement('span');
-      span.className = 'tag';
-      span.textContent = tech;
-      tagsContainer.appendChild(span);
-    });
-
-    // Highlights list
-    const highlightsContainer = document.getElementById('modal-highlights');
-    highlightsContainer.innerHTML = '';
-    data.highlights.forEach(item => {
-      const li = document.createElement('li');
-      li.style.marginBottom = '0.5rem';
-      li.style.position = 'relative';
-      li.style.paddingLeft = '1.25rem';
-      li.innerHTML = `<span style="position: absolute; left: 0; color: var(--accent-primary);">✔</span> ${item}`;
-      highlightsContainer.appendChild(li);
-    });
-
-    // Links
-    const githubLink = document.getElementById('modal-github');
-    const demoLink = document.getElementById('modal-demo');
-    if (githubLink) githubLink.href = data.github;
-    if (demoLink) demoLink.href = data.demo;
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  viewDetailBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const id = btn.getAttribute('data-project');
-      openModal(id);
-    });
-  });
-
-  if (modalClose) {
-    modalClose.addEventListener('click', closeModal);
-  }
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal();
-    }
-  });
-}
-
-/* ==========================================================================
-   6. ScrollSpy for Active Nav Link
+   5. ScrollSpy for Active Nav Link
    ========================================================================== */
 function initScrollSpy() {
   const sections = document.querySelectorAll('section[id]');
@@ -296,7 +172,7 @@ function initScrollSpy() {
 
   const observerOptions = {
     root: null,
-    rootMargin: '-20% 0px -70% 0px',
+    rootMargin: '-25% 0px -65% 0px',
     threshold: 0
   };
 
@@ -319,14 +195,14 @@ function initScrollSpy() {
 }
 
 /* ==========================================================================
-   7. Back to Top Button
+   6. Back to Top Button
    ========================================================================== */
 function initBackToTop() {
   const scrollTopBtn = document.getElementById('scroll-top');
   if (!scrollTopBtn) return;
 
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 400) {
+    if (window.scrollY > 350) {
       scrollTopBtn.classList.add('visible');
     } else {
       scrollTopBtn.classList.remove('visible');
@@ -342,7 +218,7 @@ function initBackToTop() {
 }
 
 /* ==========================================================================
-   8. Contact Form & Feedback Toast
+   7. Contact Form & Feedback Toast
    ========================================================================== */
 function initContactForm() {
   const form = document.getElementById('contact-form');
@@ -353,16 +229,20 @@ function initContactForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const name = form.querySelector('#name').value.trim();
-    const email = form.querySelector('#email').value.trim();
-    const message = form.querySelector('#message').value.trim();
+    const nameInput = form.querySelector('#name');
+    const emailInput = form.querySelector('#email');
+    const messageInput = form.querySelector('#message');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const email = emailInput ? emailInput.value.trim() : '';
+    const message = messageInput ? messageInput.value.trim() : '';
 
     if (!name || !email || !message) {
       showToast('Please fill out all required fields.', false);
       return;
     }
 
-    // Email format check
+    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       showToast('Please enter a valid email address.', false);
@@ -370,17 +250,21 @@ function initContactForm() {
     }
 
     const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = 'Sending message...';
-    submitBtn.disabled = true;
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Send Message';
+    if (submitBtn) {
+      submitBtn.innerHTML = 'Sending...';
+      submitBtn.disabled = true;
+    }
 
-    // Simulate sending (or forward to mailto / formspree)
+    // Client-side confirmation feedback
     setTimeout(() => {
-      showToast('Thank you! Your message has been sent successfully.', true);
+      showToast('Thank you! Your message has been received.', true);
       form.reset();
-      submitBtn.innerHTML = originalText;
-      submitBtn.disabled = false;
-    }, 1200);
+      if (submitBtn) {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    }, 800);
   });
 
   function showToast(message, isSuccess) {
@@ -392,6 +276,6 @@ function initContactForm() {
 
     setTimeout(() => {
       toast.classList.remove('show');
-    }, 4500);
+    }, 4000);
   }
 }

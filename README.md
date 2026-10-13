@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-# My-Portfolio
-=======
 <div align="center">
 
-# 🌟 Banushri Kandhan — Personal Portfolio Website
+# 🌟 Banushri Kandhan — AI/ML Engineer Portfolio
 
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Machine Learning](https://img.shields.io/badge/Machine%20Learning-FF6F00?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
@@ -15,8 +12,8 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/banushri-kandhan-24b28a2a5/)
 
 <p align="center">
-  <b>Python Developer &bull; AI & Machine Learning Enthusiast &bull; Computer Science Undergraduate</b><br>
-  <i>Crafting intelligent machine learning applications and modern, high-performance web experiences.</i>
+  <b>AI/ML Engineer &bull; Python Developer &bull; B.Sc. Computer Science Graduate</b><br>
+  <i>Passionate about Artificial Intelligence, Machine Learning models, and responsive web applications.</i>
 </p>
 
 [Explore Projects](#-featured-projects) &bull; [Technical Skills](#-technical-skills) &bull; [Internships](#-internship-experience) &bull; [Education](#-education) &bull; [Certifications](#-certifications) &bull; [Contact Me](#-contact-details)
@@ -168,4 +165,4 @@ Then visit: `http://localhost:3000` in your web browser.
 <p align="center">
   &copy; 2026 Banushri Kandhan. All rights reserved.
 </p>
->>>>>>> 4a6e297 (feat: complete modern portfolio website for Banushri Kandhan with projects, skills, and resume)
+
